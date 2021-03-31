@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">MisPacientes</string>
+    <string name="todo">TODO</string>
+    <string name="administrar_pacientes">Administrar pacientes</string>
+    <string name="nombres">nombres</string>
+    <string name="apellidos">apellidos</string>
+    <string name="cedula">cédula</string>
+    <string name="fecha_nacimiento">fecha de nacimiento</string>
+    <string name="sexo">sexo</string>
+    <string name="anamnesis">anamnesis</string>
+    <string name="celular">celular</string>
+    <string name="correo_electronico">correo electrónico</string>
+    <string name="notas">notas</string>
+</resources>
