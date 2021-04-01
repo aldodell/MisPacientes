@@ -2,9 +2,13 @@ package com.psiqueylogosac.mispacientes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Button
 import android.widget.EditText
+import androidx.annotation.MainThread
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.util.*
 
 class EditorPaciente : AppCompatActivity() {
 
@@ -20,10 +24,16 @@ class EditorPaciente : AppCompatActivity() {
     lateinit var salvar: Button
     lateinit var descartar: Button
 
+    var uid = 0L
+    var modo = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editor_paciente)
+
+
+        //Creamos los objetos
         nombresEt = findViewById(R.id.nombresEt)
         apellidosEt = findViewById(R.id.apellidosEt)
         cedulaEt = findViewById(R.id.cedulaEt)
@@ -37,47 +47,98 @@ class EditorPaciente : AppCompatActivity() {
         descartar = findViewById(R.id.descartarBt)
 
 
+
+
+        //Verificamos el modo
+        //Cargamos los datos del paciente si venimos del modo "editar"
+        modo = this.intent.getStringExtra("modo")!!
+
+
+        //Precargamos la interfaz si el modo es editar
+        if (modo == "editar") {
+            Thread {
+                uid = this.intent.getLongExtra("uid", 0)
+                val paciente = baseDatos.pacienteDao().porUid(uid)
+
+                runOnUiThread {
+                    apellidosEt.setText(paciente.apellidos)
+                    nombresEt.setText(paciente.nombres)
+                    cedulaEt.setText(paciente.cedula)
+                    fechaNacimientoEt.setText(paciente.fechaNacimiento)
+                    celularEt.setText(paciente.celular)
+                    correoElectronicoEt.setText(paciente.correoElectronico)
+                    anamnesisEt.setText(paciente.anamnesis)
+                    notasEt.setText(paciente.notas)
+                    sexo.isChecked = paciente.sexo!! == "H"
+                }
+            }.start()
+        }
+
+
+//Cambio de etiqueta de sexo segun click al switch
         sexo.setOnCheckedChangeListener { _, isChecked ->
-            if(isChecked) {
+            if (isChecked) {
                 sexo.text = getString(R.string.hombre)
-            } else  {
+            } else {
                 sexo.text = getString(R.string.mujer)
             }
 
         }
 
         salvar.setOnClickListener {
-
-            var s = ""
-            if (sexo.isChecked) {
-                s = "H"
-            } else {
-                s = "M"
-            }
-            var paciente = Paciente(
-                0,
-                apellidosEt.text.toString(),
-                nombresEt.text.toString(),
-                s,
-                cedulaEt.text.toString(),
-                fechaNacimientoEt.text.toString(),
-                anamnesisEt.text.toString(),
-                notasEt.text.toString(),
-                celularEt.text.toString(),
-                correoElectronicoEt.text.toString()
-
-            )
-
-            Thread {
-                baseDatos.pacienteDao().insertar(paciente)
-                finish()
-            }.join()
-
-
+            salvarDatos()
         }
 
         descartar.setOnClickListener {
-            finish()
+            runOnUiThread {
+                finish()
+            }
         }
+
+
     }
+
+
+    fun salvarDatos() {
+        var s = ""
+        if (sexo.isChecked) {
+            s = "H"
+        } else {
+            s = "M"
+        }
+
+        if (modo == "crear") {
+            uid = UUID.randomUUID().leastSignificantBits
+        }
+
+        val paciente = Paciente(
+            uid,
+            apellidosEt.text.toString(),
+            nombresEt.text.toString(),
+            s,
+            cedulaEt.text.toString(),
+            fechaNacimientoEt.text.toString(),
+            anamnesisEt.text.toString(),
+            notasEt.text.toString(),
+            celularEt.text.toString(),
+            correoElectronicoEt.text.toString()
+
+        )
+
+        Thread {
+            if (modo == "crear") {
+                baseDatos.pacienteDao().insertar(paciente)
+            } else if (modo == "editar") {
+                baseDatos.pacienteDao().actualizar(paciente)
+            }
+
+            runOnUiThread {
+                finish()
+            }
+        }.start()
+
+
+    }
+
+
 }

@@ -6,7 +6,7 @@ import java.util.*
 
 @Entity(tableName="pacientes")
 data class Paciente (
-        @PrimaryKey val uid : Int,
+        @PrimaryKey val uid : Long,
         val apellidos : String?,
         val nombres : String?,
         val sexo:String?,
