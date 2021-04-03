@@ -29,7 +29,7 @@ class PacienteAdaptador : RecyclerView.Adapter<PacienteAdaptador.PacienteViewHol
 
         holder.editarIb.setOnClickListener {
             val intent = Intent(it.context, EditorPaciente::class.java)
-            intent.putExtra("modo","editar")
+            intent.putExtra("modo", MODO_EDITAR)
             intent.putExtra("uid", p.uid)
             it.context.startActivity(intent)
         }

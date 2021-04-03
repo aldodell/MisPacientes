@@ -24,7 +24,7 @@ class EditorPaciente : AppCompatActivity() {
     lateinit var salvar: Button
     lateinit var descartar: Button
 
-    var uid = 0L
+    var uid = ""
     var modo = ""
 
 
@@ -47,8 +47,6 @@ class EditorPaciente : AppCompatActivity() {
         descartar = findViewById(R.id.descartarBt)
 
 
-
-
         //Verificamos el modo
         //Cargamos los datos del paciente si venimos del modo "editar"
         modo = this.intent.getStringExtra("modo")!!
@@ -57,7 +55,7 @@ class EditorPaciente : AppCompatActivity() {
         //Precargamos la interfaz si el modo es editar
         if (modo == "editar") {
             Thread {
-                uid = this.intent.getLongExtra("uid", 0)
+                uid = this.intent.getStringExtra("uid")
                 val paciente = baseDatos.pacienteDao().porUid(uid)
 
                 runOnUiThread {
@@ -108,7 +106,7 @@ class EditorPaciente : AppCompatActivity() {
         }
 
         if (modo == "crear") {
-            uid = UUID.randomUUID().leastSignificantBits
+            uid = UUID.randomUUID().toString()
         }
 
         val paciente = Paciente(

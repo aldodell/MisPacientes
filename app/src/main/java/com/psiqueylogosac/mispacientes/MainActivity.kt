@@ -14,6 +14,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 lateinit var baseDatos: AppBaseDatos
 var pacientes = ArrayList<Paciente>()
 
+val MODO_CREAR = "crear"
+val MODO_EDITAR = "editar"
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -47,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         //Asignamos la repsuesta al boton agregar paciente
         fab.setOnClickListener {
             var intent = Intent(it.context, EditorPaciente::class.java)
-            intent.putExtra("modo", "crear")
+            intent.putExtra("modo", MODO_CREAR)
             startActivity(intent)
         }
 

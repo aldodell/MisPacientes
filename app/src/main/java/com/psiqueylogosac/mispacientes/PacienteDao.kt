@@ -11,7 +11,7 @@ interface PacienteDao {
     fun porCedula(cedula: String) : Paciente
 
     @Query("select * from pacientes where uid = :uid")
-    fun porUid(uid: Long) : Paciente
+    fun porUid(uid: String) : Paciente
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertar(vararg pacientes : Paciente)
