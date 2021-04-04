@@ -16,4 +16,8 @@
     <string name="hombre">hombre</string>
     <string name="salvar">salvar</string>
     <string name="descartar">descartar</string>
+    <string name="si">Sí</string>
+    <string name="no">No</string>
+    <string name="desea_borrar_registro">¿Desea borrar este registro?</string>
+
 </resources>

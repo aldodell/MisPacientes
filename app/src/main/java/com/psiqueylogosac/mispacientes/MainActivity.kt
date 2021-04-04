@@ -18,7 +18,6 @@ val MODO_CREAR = "crear"
 val MODO_EDITAR = "editar"
 
 
-
 class MainActivity : AppCompatActivity() {
 
     lateinit var pacientes_rv: RecyclerView
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         //Instancia del adaptador del RV
-        adaptador = PacienteAdaptador()
+        adaptador = PacienteAdaptador(this)
 
         //Instancia del botón para agregar pacientes
         fab = findViewById(R.id.fab)
@@ -58,19 +57,27 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
+
+    fun actualizarUI() {
+        Log.i("aldox", "ON START")
 
         //Leemos la base de datos:
         Thread {
-            pacientes = baseDatos.pacienteDao().todos() as ArrayList<Paciente>
+            pacientes.clear()
+            pacientes.addAll(
+                baseDatos.pacienteDao().todos() as ArrayList<Paciente>
+            )
             runOnUiThread {
                 pacientes_rv.adapter?.notifyDataSetChanged()
+                pacientes_rv.invalidate()
                 Log.i("aldox", "objetos: ${pacientes.size}")
             }
         }.start()
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        actualizarUI()
     }
 
 
