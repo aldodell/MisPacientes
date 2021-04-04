@@ -57,6 +57,10 @@ class PacienteAdaptador(var mainActivity: MainActivity) :
                 .show()
         }
 
+        holder.pacienteTv.setOnClickListener {
+
+        }
+
     }
 
     override fun getItemCount(): Int {
