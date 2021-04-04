@@ -9,6 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MisPacientes">
+        <activity android:name=".ListaCitas"></activity>
         <activity android:name=".EditorPaciente" />
         <activity android:name=".MainActivity">
             <intent-filter>
