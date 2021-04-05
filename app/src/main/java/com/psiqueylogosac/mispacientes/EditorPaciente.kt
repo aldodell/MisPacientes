@@ -53,7 +53,7 @@ class EditorPaciente : AppCompatActivity() {
 
 
         //Precargamos la interfaz si el modo es editar
-        if (modo == "editar") {
+        if (modo == MODOS.EDITAR.name) {
             Thread {
                 uid = this.intent.getStringExtra("uid")
                 val paciente = baseDatos.pacienteDao().porUid(uid)
@@ -105,7 +105,7 @@ class EditorPaciente : AppCompatActivity() {
             s = "M"
         }
 
-        if (modo == "crear") {
+        if (modo == MODOS.CREAR.name) {
             uid = UUID.randomUUID().toString()
         }
 
@@ -124,9 +124,9 @@ class EditorPaciente : AppCompatActivity() {
         )
 
         Thread {
-            if (modo == "crear") {
+            if (modo == MODOS.CREAR.name) {
                 baseDatos.pacienteDao().insertar(paciente)
-            } else if (modo == "editar") {
+            } else if (modo == MODOS.EDITAR.name) {
                 baseDatos.pacienteDao().actualizar(paciente)
             }
 

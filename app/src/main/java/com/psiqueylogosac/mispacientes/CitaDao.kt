@@ -6,8 +6,7 @@ import androidx.room.*
 interface CitaDao {
 
     @Query("select * from citas order by fecha, hora")
-    fun todos(pacienteUid: String): List<Cita>
-
+    fun todos(): List<Cita>
 
     @Query("select * from citas where pacienteUid = :pacienteUid")
     fun porPaciente(pacienteUid: String): List<Cita>

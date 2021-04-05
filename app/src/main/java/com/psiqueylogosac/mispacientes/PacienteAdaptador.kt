@@ -19,7 +19,7 @@ class PacienteAdaptador(var mainActivity: MainActivity) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PacienteViewHolder {
-        var vh = LayoutInflater.from(parent.context)
+        val vh = LayoutInflater.from(parent.context)
             .inflate(R.layout.paciente_fila, parent, false)
         return PacienteViewHolder(vh)
     }
@@ -31,7 +31,7 @@ class PacienteAdaptador(var mainActivity: MainActivity) :
 
         holder.editarIb.setOnClickListener {
             val intent = Intent(it.context, EditorPaciente::class.java)
-            intent.putExtra("modo", MODO_EDITAR)
+            intent.putExtra("modo", MODOS.EDITAR.name)
             intent.putExtra("uid", p.uid)
             it.context.startActivity(intent)
         }
@@ -58,6 +58,10 @@ class PacienteAdaptador(var mainActivity: MainActivity) :
         }
 
         holder.pacienteTv.setOnClickListener {
+            val intento = Intent(it.context, ListaCitasActivity::class.java)
+            intento.putExtra("modo", MODOS.UNO.name)
+            intento.putExtra("pacienteUid", p.uid)
+            it.context.startActivity(intento)
 
         }
 
