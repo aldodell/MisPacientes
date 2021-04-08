@@ -8,15 +8,17 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 
-class CitaAdaptador(var listaCitasActivity: ListaCitasActivity) :
+class CitaAdaptador(var listaCitasActivity: ListaCitasActivity, var pacienteUid: String) :
     RecyclerView.Adapter<CitaAdaptador.CitaViewHolder>() {
 
+    var paciente: Paciente = baseDatos.pacienteDao().porUid(pacienteUid)
 
     class CitaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val fechaHoraTv = itemView.findViewById<TextView>(R.id.listaCitaFechaHoraTv)
         val nombresApellidos = itemView.findViewById<TextView>(R.id.listaCitaApellidosNombresTv)
         val editarIb = itemView.findViewById<ImageButton>(R.id.listaCitaEditarIb)
         val eliminarIb = itemView.findViewById<ImageButton>(R.id.listaCitaEliminarIb)
+
     }
 
     /**
@@ -71,18 +73,25 @@ class CitaAdaptador(var listaCitasActivity: ListaCitasActivity) :
      */
     override fun onBindViewHolder(holder: CitaViewHolder, position: Int) {
         val cita = listaCitasActivity.citas[position]
+        val fechaHora =
+            formateadorFecha.format(cita.fecha!!) + " " + formateadorHora.format(cita.hora!!)
+        val apellidosNombres = "${paciente.apellidos} ${paciente.nombres}"
+
+        holder.fechaHoraTv.setText(fechaHora)
+        holder.nombresApellidos.setText(apellidosNombres)
+
 
         holder.eliminarIb.setOnClickListener {
             AlertDialog.Builder(it.context)
                 .setTitle(R.string.desea_borrar_registro)
                 .setPositiveButton(R.string.si) { dialog, p1 ->
                     Thread {
-                        baseDatos.citaDato().eliminar(cita)
+                        baseDatos.citaDao().eliminar(cita)
                         listaCitasActivity.runOnUiThread {
                             listaCitasActivity.actualizarUI()
                         }
                     }.start()
-                    listaCitasActivity.actualizarUI(cita.pacienteUid)
+                    listaCitasActivity.actualizarUI()
                     dialog.dismiss()
                 }
                 .setNegativeButton(R.string.no) { dialog, p1 ->

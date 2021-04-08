@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MisPacientes</string>
+    <string name="app_name">Mis pacientes</string>
     <string name="todo">TODO</string>
     <string name="administrar_pacientes">Administrar pacientes</string>
     <string name="nombres">nombres</string>
@@ -20,5 +20,13 @@
     <string name="no">No</string>
     <string name="desea_borrar_registro">¿Desea borrar este registro?</string>
     <string name="seleccionar_agregar_cita">Selecciona una cita previa o agrega una nueva</string>
+    <string name="no_hay_citas_asignadas">No tiene citas en esta fecha</string>
+    <string name="fecha">Fecha</string>
+    <string name="hora">Hora</string>
+    <string name="honorarios">Honorarios</string>
+    <string name="desea_descartar">¿Desea descartar este registro?</string>
+    <string name="otras_citas_asignadas">Otras citas asignadas ese día:</string>
+    <string name="proximas_citas">Próximas citas:</string>
+    <string name="intrucciones_administrar_pacientes">Puede agregar un paciente nuevo haciendo click en ícono agregar, o bien modificar e incluso eliminar alguno que esté registrado en los botones correspondientes. Haga click sobre el nombre para administrar las citas.</string>
 
 </resources>

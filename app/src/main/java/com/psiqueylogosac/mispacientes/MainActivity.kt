@@ -4,16 +4,23 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 lateinit var baseDatos: AppBaseDatos
-var pacientes = ArrayList<Paciente>()
 
+var pacientes = ArrayList<Paciente>()
+val formateadorFecha = SimpleDateFormat("dd-MM-yyyy")
+val formateadorHora = SimpleDateFormat("hh:mm")
 
 enum class MODOS(val m: String) {
     CREAR("crear"),
@@ -25,59 +32,51 @@ enum class MODOS(val m: String) {
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var pacientes_rv: RecyclerView
-    lateinit var fab: FloatingActionButton
-    lateinit var adaptador: PacienteAdaptador
+    lateinit var mainAdministrarPacientesIb: ImageButton
+    lateinit var mainProximasCitasRv: RecyclerView
+
+    var proximasCitas = ArrayList<CitasConPaciente>()
+    var adaptador = MainCitaAdaptador(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Instancia del adaptador del RV
-        adaptador = PacienteAdaptador(this)
 
-        //Instancia del botón para agregar pacientes
-        fab = findViewById(R.id.fab)
+        baseDatos = Room.databaseBuilder(this, AppBaseDatos::class.java, "pacientes")
+            .build()
 
-        //Instancia del RV
-        pacientes_rv = findViewById(R.id.recyclerView)
 
-        //Instancia singleton de la base de datos
-        baseDatos =
-            Room.databaseBuilder(applicationContext, AppBaseDatos::class.java, "pacientes")
-                .allowMainThreadQueries()
-                .build()
+        mainAdministrarPacientesIb = findViewById(R.id.mainAdministrarPacientesIb)
+        mainProximasCitasRv = findViewById(R.id.mainProximasCitasRv)
 
-        //Configuración del RV
-        pacientes_rv.adapter = adaptador
-        pacientes_rv.layoutManager = LinearLayoutManager(applicationContext)
-
-        //Asignamos la repsuesta al boton agregar paciente
-        fab.setOnClickListener {
-            var intent = Intent(it.context, EditorPaciente::class.java)
-            intent.putExtra("modo", MODOS.CREAR.name)
-            startActivity(intent)
+        mainAdministrarPacientesIb.setOnClickListener {
+            val intento = Intent(this, ListaPacientesActivity::class.java)
+            startActivity(intento)
         }
 
+        mainProximasCitasRv.apply {
+            adapter = adaptador
+            layoutManager = LinearLayoutManager(this.context)
+        }
 
+        //actualizarUI()
     }
 
-
     fun actualizarUI() {
-        Log.i("aldox", "ON START")
-
-        //Leemos la base de datos:
+        proximasCitas.clear()
         Thread {
-            pacientes.clear()
-            pacientes.addAll(
-                baseDatos.pacienteDao().todos() as ArrayList<Paciente>
-            )
+            proximasCitas.addAll(baseDatos.citaDao().aPartirDe(Date()))
             runOnUiThread {
-                pacientes_rv.adapter?.notifyDataSetChanged()
-                pacientes_rv.invalidate()
-                Log.i("aldox", "objetos: ${pacientes.size}")
+                adaptador.notifyDataSetChanged()
+                Toast.makeText(
+                    this.applicationContext,
+                    "citas: ${proximasCitas.size}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }.start()
+
     }
 
     override fun onResume() {
@@ -87,3 +86,4 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+

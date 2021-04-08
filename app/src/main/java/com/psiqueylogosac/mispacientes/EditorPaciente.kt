@@ -2,11 +2,9 @@ package com.psiqueylogosac.mispacientes
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import android.widget.EditText
-import androidx.annotation.MainThread
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.switchmaterial.SwitchMaterial
 import java.util.*
 
@@ -62,7 +60,7 @@ class EditorPaciente : AppCompatActivity() {
                     apellidosEt.setText(paciente.apellidos)
                     nombresEt.setText(paciente.nombres)
                     cedulaEt.setText(paciente.cedula)
-                    fechaNacimientoEt.setText(paciente.fechaNacimiento)
+                    fechaNacimientoEt.setText(formateadorFecha.format(paciente.fechaNacimiento!!))
                     celularEt.setText(paciente.celular)
                     correoElectronicoEt.setText(paciente.correoElectronico)
                     anamnesisEt.setText(paciente.anamnesis)
@@ -88,11 +86,19 @@ class EditorPaciente : AppCompatActivity() {
         }
 
         descartar.setOnClickListener {
-            runOnUiThread {
-                finish()
-            }
-        }
 
+            AlertDialog.Builder(it.context)
+                .setTitle(R.string.desea_descartar)
+                .setPositiveButton(R.string.si) { d, p ->
+                    runOnUiThread {
+                        finish()
+                    }
+                }
+                .setNegativeButton(R.string.no) { d, p ->
+                    d.dismiss()
+                }
+                .show()
+        }
 
     }
 
@@ -109,13 +115,14 @@ class EditorPaciente : AppCompatActivity() {
             uid = UUID.randomUUID().toString()
         }
 
+
         val paciente = Paciente(
             uid,
             apellidosEt.text.toString(),
             nombresEt.text.toString(),
             s,
             cedulaEt.text.toString(),
-            fechaNacimientoEt.text.toString(),
+            formateadorFecha.parse(fechaNacimientoEt.text.toString().replace("/", "-")),
             anamnesisEt.text.toString(),
             notasEt.text.toString(),
             celularEt.text.toString(),

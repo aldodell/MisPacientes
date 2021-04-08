@@ -11,7 +11,7 @@ data class Paciente (
         val nombres : String?,
         val sexo:String?,
         val cedula : String?,
-        val fechaNacimiento : String?,
+        val fechaNacimiento : Date?,
         val anamnesis : String?,
         val notas : String?,
         val celular : String?,

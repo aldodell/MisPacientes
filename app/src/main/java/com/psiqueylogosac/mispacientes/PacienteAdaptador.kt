@@ -10,7 +10,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PacienteAdaptador(var mainActivity: MainActivity) :
+class PacienteAdaptador(var listaPacientesActivity: ListaPacientesActivity) :
     RecyclerView.Adapter<PacienteAdaptador.PacienteViewHolder>() {
     class PacienteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val pacienteTv: TextView = itemView.findViewById(R.id.paciente_tv)
@@ -46,7 +46,7 @@ class PacienteAdaptador(var mainActivity: MainActivity) :
                     }
                     hilo.start()
                     hilo.join()
-                    mainActivity.actualizarUI()
+                    // mainActivity.actualizarUI()
                     dialog?.dismiss()
 
                 }

@@ -8,9 +8,12 @@
 
     <TextView
         android:id="@+id/textView"
+        style="@style/Widget.AppCompat.TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/administrar_pacientes"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -120,6 +123,8 @@
                     android:id="@+id/descartarBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:text="@string/descartar" />
 
@@ -127,6 +132,8 @@
                     android:id="@+id/salvarBt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:text="@string/salvar" />
             </LinearLayout>

@@ -6,9 +6,20 @@
     android:layout_height="match_parent"
     tools:context=".EditorCitaActivity">
 
+    <Button
+        android:id="@+id/editorCitasSalvarBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/salvar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -28,6 +39,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:ems="10"
+                android:hint="@string/fecha"
                 android:inputType="date"
                 app:layout_constraintEnd_toStartOf="@+id/editorCitasFechaIb"
                 app:layout_constraintStart_toStartOf="parent"
@@ -48,15 +60,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="200dp"
                 android:ems="10"
+                android:hint="@string/hora"
                 android:inputType="time"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/editorCitasHoraIb"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editorCitasFechaEt" />
+                app:layout_constraintTop_toBottomOf="@+id/editorCitasOtrasCitasTv" />
 
             <ImageButton
                 android:id="@+id/editorCitasHoraIb"
@@ -67,6 +78,63 @@
                 app:layout_constraintTop_toTopOf="@+id/editorCitasHoraEt"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
 
+            <EditText
+                android:id="@+id/editorCitasOtrasCitasTv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:focusable="false"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:text="@string/no_hay_citas_asignadas"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editorCitasFechaEt" />
+
+            <EditText
+                android:id="@+id/editorCitasNotasEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/notas"
+                android:inputType="textMultiLine"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editorCitasHoraEt" />
+
+            <EditText
+                android:id="@+id/editorCitasHonorariosEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="32dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/honorarios"
+                android:inputType="textMultiLine"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editorCitasNotasEt" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/editorCitasDescartarBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:text="@string/descartar"
+        app:layout_constraintEnd_toStartOf="@+id/editorCitasSalvarBt"
+        app:layout_constraintTop_toTopOf="@+id/editorCitasSalvarBt" />
 </androidx.constraintlayout.widget.ConstraintLayout>
