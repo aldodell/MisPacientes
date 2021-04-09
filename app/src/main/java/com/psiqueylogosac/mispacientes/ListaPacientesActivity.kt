@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -15,6 +17,7 @@ class ListaPacientesActivity : AppCompatActivity() {
     lateinit var pacientes_rv: RecyclerView
     lateinit var fab: FloatingActionButton
     lateinit var adaptador: PacienteAdaptador
+    lateinit var botonAyuda : ImageButton
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,9 @@ class ListaPacientesActivity : AppCompatActivity() {
         //Instancia del RV
         pacientes_rv = findViewById(R.id.recyclerView)
 
+        //Boton ayuda
+        botonAyuda = findViewById(R.id.listaPacientesAyudaIb)
+
         //Instancia singleton de la base de datos
         baseDatos =
             Room.databaseBuilder(applicationContext, AppBaseDatos::class.java, "pacientes")
@@ -46,6 +52,16 @@ class ListaPacientesActivity : AppCompatActivity() {
             val intent = Intent(it.context, EditorPaciente::class.java)
             intent.putExtra("modo", MODOS.CREAR.name)
             startActivity(intent)
+        }
+
+        //Mostramos la ayuda
+        botonAyuda.setOnClickListener {
+            AlertDialog.Builder(it.context)
+                .setMessage(R.string.intrucciones_administrar_pacientes)
+                .setNeutralButton(R.string.si) {dialogo, _ ->
+                    dialogo.dismiss()
+                }
+                .show()
         }
 
 

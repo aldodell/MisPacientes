@@ -115,7 +115,6 @@ class EditorPaciente : AppCompatActivity() {
             uid = UUID.randomUUID().toString()
         }
 
-
         val paciente = Paciente(
             uid,
             apellidosEt.text.toString(),

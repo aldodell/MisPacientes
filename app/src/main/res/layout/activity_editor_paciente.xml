@@ -8,13 +8,12 @@
 
     <TextView
         android:id="@+id/textView"
-        style="@style/Widget.AppCompat.TextView"
-        android:layout_width="wrap_content"
+        style="@style/Theme.MisPacientes.Titulo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:text="@string/administrar_pacientes"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -126,7 +125,8 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_weight="1"
-                    android:text="@string/descartar" />
+                    android:text="@string/descartar"
+                    android:textColor="@color/design_default_color_on_primary" />
 
                 <Button
                     android:id="@+id/salvarBt"
@@ -135,7 +135,8 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_weight="1"
-                    android:text="@string/salvar" />
+                    android:text="@string/salvar"
+                    android:textColor="@color/design_default_color_on_primary" />
             </LinearLayout>
 
         </LinearLayout>

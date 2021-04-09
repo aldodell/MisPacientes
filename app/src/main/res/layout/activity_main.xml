@@ -35,13 +35,14 @@
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_marginBottom="32dp"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/administrar_pacientes"
-        android:src="@drawable/icons8_adopted_boy_96"
+        android:scaleType="fitCenter"
+        android:src="@drawable/_1872_family_man_woman_boy_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@drawable/icons8_adopted_boy_96" />
+        tools:srcCompat="@drawable/_1872_family_man_woman_boy_icon" />
 
     <TextView
         android:id="@+id/textView4"

@@ -1,7 +1,7 @@
 package com.psiqueylogosac.mispacientes
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +16,8 @@ class PacienteAdaptador(var listaPacientesActivity: ListaPacientesActivity) :
         val pacienteTv: TextView = itemView.findViewById(R.id.paciente_tv)
         val borrarIb: ImageButton = itemView.findViewById(R.id.borrarPacienteIb)
         val editarIb: ImageButton = itemView.findViewById(R.id.editarPacienteIb)
+        val pacienteFilaAbrirCitaIb =
+            itemView.findViewById<ImageButton>(R.id.pacienteFilaAbrirCitaIb)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PacienteViewHolder {
@@ -41,12 +43,13 @@ class PacienteAdaptador(var listaPacientesActivity: ListaPacientesActivity) :
                 .setPositiveButton(
                     it.context.getString(R.string.si)
                 ) { dialog, p1 ->
-                    val hilo = Thread {
+                    Thread {
+                        //Eliminamos al paciente y su citas
                         baseDatos.pacienteDao().eliminar(p)
+                        baseDatos.citaDao().eliminarCitasDePaciente(p.uid)
                     }
-                    hilo.start()
-                    hilo.join()
-                    // mainActivity.actualizarUI()
+                        .start()
+                    listaPacientesActivity.actualizarUI()
                     dialog?.dismiss()
 
                 }
@@ -58,16 +61,25 @@ class PacienteAdaptador(var listaPacientesActivity: ListaPacientesActivity) :
         }
 
         holder.pacienteTv.setOnClickListener {
-            val intento = Intent(it.context, ListaCitasActivity::class.java)
-            intento.putExtra("modo", MODOS.UNO.name)
-            intento.putExtra("pacienteUid", p.uid)
-            it.context.startActivity(intento)
+            abrirCitas(it.context, p)
+        }
 
+        holder.pacienteFilaAbrirCitaIb.setOnClickListener {
+            abrirCitas(it.context, p)
         }
 
     }
 
+
     override fun getItemCount(): Int {
         return pacientes.size
+    }
+
+    fun abrirCitas(context: Context, p: Paciente) {
+        val intento =
+            Intent(context, ListaCitasActivity::class.java)
+        intento.putExtra("modo", MODOS.UNO.name)
+        intento.putExtra("pacienteUid", p.uid)
+        context.startActivity(intento)
     }
 }

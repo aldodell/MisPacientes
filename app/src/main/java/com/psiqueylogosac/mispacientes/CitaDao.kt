@@ -6,6 +6,10 @@ import java.util.*
 @Dao
 interface CitaDao {
 
+
+    @Query("select * from citas where uid=:citaUid")
+    fun porUid(citaUid : String) : Cita
+
     @Query("select * from citas order by fecha, hora")
     fun todos(): List<Cita>
 
@@ -18,11 +22,11 @@ interface CitaDao {
 
     @Transaction
     @Query("select * from citas where fecha = :fecha")
-    fun porFecha(fecha: Date) : List<CitasConPaciente>
+    fun porFecha(fecha: Date): List<CitasConPaciente>
 
     @Transaction
     @Query("select * from citas where fecha  >= :fecha order by fecha, hora")
-    fun aPartirDe(fecha:Date) : List<CitasConPaciente>
+    fun aPartirDe(fecha: Date): List<CitasConPaciente>
 
 
     @Insert
@@ -33,6 +37,9 @@ interface CitaDao {
 
     @Update
     fun actualizar(vararg citas: Cita)
+
+    @Query("delete from citas where pacienteUid = :pacienteUid")
+    fun eliminarCitasDePaciente(pacienteUid: String)
 
 
 }

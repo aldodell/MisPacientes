@@ -1,5 +1,6 @@
 package com.psiqueylogosac.mispacientes
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -81,6 +82,18 @@ class CitaAdaptador(var listaCitasActivity: ListaCitasActivity, var pacienteUid:
         holder.nombresApellidos.setText(apellidosNombres)
 
 
+
+        //Boton modificar
+        holder.editarIb.setOnClickListener {
+            val intento = Intent(it.context, EditorCitaActivity::class.java)
+            intento.putExtra("modo", MODOS.EDITAR.name)
+            intento.putExtra("citaUid", cita.uid)
+            intento.putExtra("pacienteUid",pacienteUid)
+            it.context.startActivity(intento)
+        }
+
+
+        //boton eliminar
         holder.eliminarIb.setOnClickListener {
             AlertDialog.Builder(it.context)
                 .setTitle(R.string.desea_borrar_registro)

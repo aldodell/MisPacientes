@@ -5,9 +5,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -24,7 +26,9 @@ class EditorCitaActivity : AppCompatActivity() {
     lateinit var notasEt: EditText
     lateinit var honorariosEt: EditText
 
-    var pacienteUid = ""
+    var pacienteUid: String? = null
+    var citaUid: Int? = 0
+    var cita = Cita(0, Date(), Date(), "", "", "", "")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +36,14 @@ class EditorCitaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_editor_cita)
 
         modo = MODOS.valueOf(intent.getStringExtra("modo")!!)
-        pacienteUid = intent.getStringExtra("pacienteUid")!!
+        pacienteUid = intent.getStringExtra("pacienteUid")
+        citaUid = intent.getIntExtra("citaUid", 0)
+        cita.pacienteUid = pacienteUid!!
+
+        if (citaUid == null) citaUid = 0
+
+        //  Log.i("aldox", pacienteUid!!)
+        // Log.i("aldox", citaUid!!.toString())
 
 
         fechaEt = findViewById(R.id.editorCitasFechaEt)
@@ -45,6 +56,20 @@ class EditorCitaActivity : AppCompatActivity() {
         notasEt = findViewById(R.id.editorCitasNotasEt)
         honorariosEt = findViewById(R.id.editorCitasHonorariosEt)
 
+
+        //Si el modo es EDITAR entonces cargamos los datos iniciales
+        if (modo == MODOS.EDITAR) {
+            Thread {
+                //Cargamos los datos
+                cita = baseDatos.citaDao().porUid(citaUid!!.toString())
+                runOnUiThread {
+                    fechaEt.setText(formateadorFecha.format(cita.fecha!!))
+                    horaEt.setText(formateadorHora.format(cita.hora!!))
+                    notasEt.setText(cita.notas)
+                    honorariosEt.setText(cita.honorarios)
+                }
+            }.start()
+        }
 
         //Configuración de los Date y Time pickers
         val calendar = Calendar.getInstance()
@@ -59,8 +84,6 @@ class EditorCitaActivity : AppCompatActivity() {
                 fechaEt.setText(
                     formateadorFecha.format(d!!)
                 )
-
-
                 Thread {
                     var r = getString(R.string.otras_citas_asignadas) + "\n"
                     val mCitas = baseDatos
@@ -70,7 +93,7 @@ class EditorCitaActivity : AppCompatActivity() {
                         mCitas.forEach { x ->
                             r = r + x.paciente.apellidos + " " + x.paciente.nombres
                             r =
-                                r + " " + formateadorHora.format(
+                                "$r " + formateadorHora.format(
                                     x.cita.hora!!
                                 ) + "\n"
                         }
@@ -99,13 +122,14 @@ class EditorCitaActivity : AppCompatActivity() {
 
         val timePickerDialogListener =
             TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-                horaEt.setText(
-                    formateadorHora.format(formateadorHora.parse("$hour:$minute")!!)
-                )
+                timePicker.setIs24HourView(false)
+                val d = SimpleDateFormat("hh:mm").parse("$hour:$minute")
+                val s = formateadorHora.format(d!!)
+                horaEt.setText(s)
             }
 
         horaIb.setOnClickListener { hb ->
-            TimePickerDialog(hb.context, timePickerDialogListener, 8, 0, true)
+            TimePickerDialog(hb.context, timePickerDialogListener, 8, 0, false)
                 .show()
         }
 
@@ -120,22 +144,21 @@ class EditorCitaActivity : AppCompatActivity() {
                 .show()
         }
 
+
+        //Guardamos la cita
         salvarBt.setOnClickListener {
             Thread {
-                val cita = Cita(
-                    0,
-
-                    formateadorFecha.parse(
-                        fechaEt.text.toString()
-                    ),
-                    formateadorHora.parse(
+                //Reformulamos la cita
+                cita.apply {
+                    fecha = formateadorFecha.parse(
+                        fechaEt.text.toString().replace("/", "-")
+                    )
+                    hora = formateadorHora.parse(
                         horaEt.text.toString()
-                    ),
-                    pacienteUid,
-                    "",
-                    notasEt.text.toString(),
-                    honorariosEt.text.toString()
-                )
+                    )
+                    notas = notasEt.text.toString()
+                    honorarios = honorariosEt.text.toString()
+                }
 
                 when (modo) {
                     MODOS.CREAR -> baseDatos.citaDao().insertar(cita)
@@ -147,12 +170,9 @@ class EditorCitaActivity : AppCompatActivity() {
                 runOnUiThread {
                     finish()
                 }
-
-
             }.start()
         }
 
-        //Si el modo es EDITAR entonces cargamos los datos iniciales
 
     }
 }

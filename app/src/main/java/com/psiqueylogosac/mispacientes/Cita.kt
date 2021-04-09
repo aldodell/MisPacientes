@@ -7,10 +7,10 @@ import java.util.*
 @Entity(tableName = "citas")
 data class Cita(
     @PrimaryKey(autoGenerate = true) val uid: Int,
-    val fecha: Date?,
-    val hora: Date?,
-    val pacienteUid: String = "",
-    val informe: String?,
-    val notas: String?,
-    val honorarios: String?
+    var fecha: Date? = Date(),
+    var hora: Date? = Date(),
+    var pacienteUid: String = "",
+    var informe: String? = "",
+    var notas: String? = "",
+    var honorarios: String? = ""
 )

@@ -20,7 +20,7 @@ lateinit var baseDatos: AppBaseDatos
 
 var pacientes = ArrayList<Paciente>()
 val formateadorFecha = SimpleDateFormat("dd-MM-yyyy")
-val formateadorHora = SimpleDateFormat("hh:mm")
+val formateadorHora = SimpleDateFormat("hh:mm a")
 
 enum class MODOS(val m: String) {
     CREAR("crear"),
@@ -69,11 +69,14 @@ class MainActivity : AppCompatActivity() {
             proximasCitas.addAll(baseDatos.citaDao().aPartirDe(Date()))
             runOnUiThread {
                 adaptador.notifyDataSetChanged()
+                /*
                 Toast.makeText(
                     this.applicationContext,
                     "citas: ${proximasCitas.size}",
                     Toast.LENGTH_LONG
                 ).show()
+                */
+
             }
         }.start()
 

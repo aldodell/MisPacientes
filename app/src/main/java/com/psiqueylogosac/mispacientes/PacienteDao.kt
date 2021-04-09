@@ -21,4 +21,5 @@ interface PacienteDao {
 
     @Delete
     fun eliminar(vararg  pacientes: Paciente)
+
 }
