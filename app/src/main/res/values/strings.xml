@@ -31,5 +31,22 @@
     <string name="editar_cita">Editar cita</string>
     <string name="citas_de_paciente">Citas del paciente</string>
     <string name="lista_de_pacientes">Lista de pacientes</string>
+    <string name="ok">OK</string>
+    <string name="indicaciones_crear_usuario">Para poder sincronizar los datos y hacer un respaldo necesitamos nos proporcione un correo electrónico válido y una contraseña. Esta información será confidencial y se pide a efectos de poder identificar la información de sus pacientes en el servidor. Asegúrese estar conectado a internet.</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="confirmacion_contrasena">Confirmación de la contraseña</string>
+    <string name="error_de_autenticacion">Hubo un error de autenticación</string>
+    <string name="mensaje_de_bienvenida">Registro correcto, bienvenido ...</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="crear_usuario">Crear usuario</string>
+    <string name="identificar_usuario">Identificar usuario (log in)</string>
+    <string name="respaldar_datos">Respaldar datos</string>
+    <string name="recuperar_datos">Recuperar datos</string>
+    <string name="usuario_creado">Usuario creado con éxito.</string>
+    <string name="error_creando_usuario">Error al intentar crear usuario</string>
+    <string name="error_validando_usuario">Error al intentar validar usuario. Asegure una conexión a internet. Error:</string>
+    <string name="contrasenas_no_coinciden">Las contraseñas no coinciden. Por favor revise la contraseña y su confirmación.</string>
+    <string name="contrasena_invalida">La contraseña debe tener 6 o más caracteres</string>
+    <string name="acceso_positivo">Usuario validado con éxito</string>
 
 </resources>

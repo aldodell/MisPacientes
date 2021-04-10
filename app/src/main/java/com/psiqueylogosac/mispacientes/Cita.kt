@@ -14,3 +14,17 @@ data class Cita(
     var notas: String? = "",
     var honorarios: String? = ""
 )
+
+fun citaHashMap(
+    fechaHora: Date? = null,
+    pacienteUid: String? = null,
+    notas: String? = null,
+    honorarios: String? = null
+): Map<String, Any?> {
+    return hashMapOf(
+        "fechaHora" to fechaHora,
+        "pacienteUid" to pacienteUid,
+        "notas" to notas,
+        "honorarios" to honorarios
+    )
+}

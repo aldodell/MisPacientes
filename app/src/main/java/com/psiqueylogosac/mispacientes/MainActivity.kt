@@ -3,15 +3,13 @@ package com.psiqueylogosac.mispacientes
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -21,6 +19,8 @@ lateinit var baseDatos: AppBaseDatos
 var pacientes = ArrayList<Paciente>()
 val formateadorFecha = SimpleDateFormat("dd-MM-yyyy")
 val formateadorHora = SimpleDateFormat("hh:mm a")
+val RC_SIGN_IN = 1
+var usuario : FirebaseUser? = null
 
 enum class MODOS(val m: String) {
     CREAR("crear"),
@@ -34,13 +34,16 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var mainAdministrarPacientesIb: ImageButton
     lateinit var mainProximasCitasRv: RecyclerView
+    lateinit var mainAjustesBoton : ImageButton
 
     var proximasCitas = ArrayList<CitasConPaciente>()
     var adaptador = MainCitaAdaptador(this)
+    private lateinit var autorizador: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
 
         baseDatos = Room.databaseBuilder(this, AppBaseDatos::class.java, "pacientes")
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         mainAdministrarPacientesIb = findViewById(R.id.mainAdministrarPacientesIb)
         mainProximasCitasRv = findViewById(R.id.mainProximasCitasRv)
+        mainAjustesBoton = findViewById(R.id.mainAjustesBt)
 
         mainAdministrarPacientesIb.setOnClickListener {
             val intento = Intent(this, ListaPacientesActivity::class.java)
@@ -59,6 +63,13 @@ class MainActivity : AppCompatActivity() {
             adapter = adaptador
             layoutManager = LinearLayoutManager(this.context)
         }
+
+
+        mainAjustesBoton.setOnClickListener {
+            val intento = Intent(it.context, AjustesActivity::class.java)
+            startActivity(intento)
+        }
+
 
         //actualizarUI()
     }
@@ -86,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         actualizarUI()
     }
+
 
 
 }

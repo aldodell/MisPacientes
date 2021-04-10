@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1008027930455",
+    "project_id": "mispacientes-92aeb",
+    "storage_bucket": "mispacientes-92aeb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1008027930455:android:f036eca9d0312ad75f3812",
+        "android_client_info": {
+          "package_name": "com.psiqueylogosac.mispacientes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1008027930455-ve350nb7octqmlel631mi4uscl2v6guk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARekg1ODYWlD2t7a_Dp6cezh1FIbRmJkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1008027930455-ve350nb7octqmlel631mi4uscl2v6guk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
