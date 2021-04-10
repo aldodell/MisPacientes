@@ -27,7 +27,7 @@
     <string name="desea_descartar">¿Desea descartar este registro?</string>
     <string name="otras_citas_asignadas">Otras citas asignadas ese día:</string>
     <string name="proximas_citas">Próximas citas:</string>
-    <string name="intrucciones_administrar_pacientes">Puede agregar un paciente nuevo haciendo clic en ícono agregar, o bien modificar e incluso eliminar alguno que esté registrado en los botones correspondientes. Haga clic sobre el nombre para administrar las citas. Si elimina un paciente se eliminan también sus citas y todos los datos asociados.</string>
+    <string name="intrucciones_administrar_pacientes">Puede agregar un paciente nuevo haciendo clic en el ícono agregar, o bien modificar e incluso eliminar alguno que esté registrado en los botones correspondientes. Haga clic sobre el nombre para administrar las citas. Si elimina un paciente se eliminan también sus citas y todos los datos asociados.</string>
     <string name="editar_cita">Editar cita</string>
     <string name="citas_de_paciente">Citas del paciente</string>
     <string name="lista_de_pacientes">Lista de pacientes</string>
@@ -36,7 +36,7 @@
     <string name="contrasena">Contraseña</string>
     <string name="confirmacion_contrasena">Confirmación de la contraseña</string>
     <string name="error_de_autenticacion">Hubo un error de autenticación</string>
-    <string name="mensaje_de_bienvenida">Registro correcto, bienvenido ...</string>
+    <string name="mensaje_de_bienvenida">Registro correcto, bienvenido</string>
     <string name="ajustes">Ajustes</string>
     <string name="crear_usuario">Crear usuario</string>
     <string name="identificar_usuario">Identificar usuario (log in)</string>
@@ -48,5 +48,7 @@
     <string name="contrasenas_no_coinciden">Las contraseñas no coinciden. Por favor revise la contraseña y su confirmación.</string>
     <string name="contrasena_invalida">La contraseña debe tener 6 o más caracteres</string>
     <string name="acceso_positivo">Usuario validado con éxito</string>
+    <string name="es_necesario_registrarse">Varias funciones de esta aplicación se sincronizan con servidores que requieren un usuario autenticado. Le invitamos a registrarse para continuar.</string>
+
 
 </resources>

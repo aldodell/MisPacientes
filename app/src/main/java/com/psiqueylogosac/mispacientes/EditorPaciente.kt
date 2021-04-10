@@ -115,6 +115,14 @@ class EditorPaciente : AppCompatActivity() {
             uid = UUID.randomUUID().toString()
         }
 
+
+
+        /* Salvar datos con Firestore */
+
+
+
+
+
         val paciente = Paciente(
             uid,
             apellidosEt.text.toString(),
@@ -140,8 +148,6 @@ class EditorPaciente : AppCompatActivity() {
                 finish()
             }
         }.start()
-
-
     }
 
 

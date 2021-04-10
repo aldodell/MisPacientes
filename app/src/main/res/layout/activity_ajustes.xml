@@ -83,49 +83,49 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ajustesContrasena" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/ajustesCrearUsuario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="32dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/v_card_icon"
                 android:text="@string/crear_usuario"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ajustesContrasenaConfirmacion" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/ajustesIdentificarUsuario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="60dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/sign_logoff_icon"
                 android:text="@string/identificar_usuario"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ajustesCrearUsuario" />
 
-            <Button
-                android:id="@+id/ajustesRespaldarDatos"
+            <TextView
+                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/respaldar_datos"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ajustesIdentificarUsuario" />
+                android:text="@string/crear_usuario"
+                app:layout_constraintEnd_toEndOf="@+id/ajustesCrearUsuario"
+                app:layout_constraintStart_toStartOf="@+id/ajustesCrearUsuario"
+                app:layout_constraintTop_toBottomOf="@+id/ajustesCrearUsuario" />
 
-            <Button
-                android:id="@+id/ajustesRecuperarDatos"
+            <TextView
+                android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/recuperar_datos"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ajustesRespaldarDatos" />
+                android:text="@string/identificar_usuario"
+                app:layout_constraintEnd_toEndOf="@+id/ajustesIdentificarUsuario"
+                app:layout_constraintStart_toStartOf="@+id/ajustesIdentificarUsuario"
+                app:layout_constraintTop_toBottomOf="@+id/ajustesIdentificarUsuario" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

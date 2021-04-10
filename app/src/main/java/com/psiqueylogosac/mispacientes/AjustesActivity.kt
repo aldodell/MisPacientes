@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,11 +16,11 @@ class AjustesActivity : AppCompatActivity() {
     lateinit var correoElectronicoEt: EditText
     lateinit var contrasenaEt: EditText
     lateinit var contrasenaConfirmacionEt: EditText
-    lateinit var crearUsuario: Button
-    lateinit var identificarUsuario: Button
-    lateinit var respaldarDatos: Button
-    lateinit var recuperarDatos: Button
-    val db = FirebaseFirestore.getInstance()
+    lateinit var crearUsuario: ImageButton
+    lateinit var identificarUsuario: ImageButton
+
+    // lateinit var respaldarDatos: Button
+    //  lateinit var recuperarDatos: Button
     val autorizador = FirebaseAuth.getInstance()
     lateinit var prefs: SharedPreferences
 
@@ -33,18 +34,20 @@ class AjustesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_ajustes)
 
 
-
         correoElectronicoEt = findViewById(R.id.ajustesCorreoElectronico)
         contrasenaEt = findViewById(R.id.ajustesContrasena)
         contrasenaConfirmacionEt = findViewById(R.id.ajustesContrasenaConfirmacion)
         crearUsuario = findViewById(R.id.ajustesCrearUsuario)
         identificarUsuario = findViewById(R.id.ajustesIdentificarUsuario)
-        respaldarDatos = findViewById(R.id.ajustesRespaldarDatos)
-        recuperarDatos = findViewById(R.id.ajustesRecuperarDatos)
 
-        respaldarDatos.isEnabled = false
-        recuperarDatos.isEnabled = false
+        crearUsuario.isEnabled = false
+        identificarUsuario.isEnabled = false
 
+        // respaldarDatos = findViewById(R.id.ajustesRespaldarDatos)
+        // recuperarDatos = findViewById(R.id.ajustesRecuperarDatos)
+
+        // respaldarDatos.isEnabled = false
+        // recuperarDatos.isEnabled = false
 
 
         prefs = this.getSharedPreferences("ajustes", MODE_PRIVATE)
@@ -52,11 +55,17 @@ class AjustesActivity : AppCompatActivity() {
         if (prefs.getString("correoElectronico", null) != null) {
             correoElectronicoEt.setText(prefs.getString("correoElectronico", ""))
             contrasenaEt.setText(prefs.getString("contrasena", ""))
-            crearUsuario.isEnabled = false
             contrasena = contrasenaEt.text.toString().trim()
             correoElectronico = correoElectronicoEt.text.toString().trim()
-        } else {
-            identificarUsuario.isEnabled = false
+            identificarUsuario.isEnabled = true
+        }
+
+
+        correoElectronicoEt.setOnFocusChangeListener { view, hasFocus ->
+            if(!hasFocus) {
+                correoElectronico = correoElectronicoEt.text.toString().trim()
+
+            }
         }
 
 
@@ -82,9 +91,11 @@ class AjustesActivity : AppCompatActivity() {
                 if (contrasenaConfirmacion.toString().length > 1) {
                     if (contrasena != contrasenaConfirmacion) {
                         AlertDialog.Builder(view.context)
-                            .setMessage(R.string.confirmacion_contrasena)
+                            .setMessage(R.string.contrasenas_no_coinciden)
                             .setNeutralButton(R.string.ok) { d, _ -> d.dismiss() }
                             .show()
+                    } else {
+                        crearUsuario.isEnabled = true
                     }
                 }
             }
@@ -97,9 +108,13 @@ class AjustesActivity : AppCompatActivity() {
                 contrasena
             ).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
+                    usuario = autorizador.currentUser
+                    usuarioId = usuario?.uid!!
+
                     prefs.edit().apply {
                         putString("correoElectronico", correoElectronico)
                         putString("contrasena", contrasena)
+                        putString("usuarioId", usuarioId)
                     }.apply()
 
                     AlertDialog.Builder(it.context)
@@ -122,8 +137,12 @@ class AjustesActivity : AppCompatActivity() {
                 .addOnCompleteListener(this)
                 { task ->
                     if (task.isSuccessful) {
-                        respaldarDatos.isEnabled = true
-                        recuperarDatos.isEnabled = true
+                        //     respaldarDatos.isEnabled = true
+                        //    recuperarDatos.isEnabled = true
+
+                        usuario = autorizador.currentUser
+                        usuarioId = usuario?.uid!!
+
 
                         AlertDialog.Builder(it.context)
                             .setMessage(R.string.acceso_positivo)
