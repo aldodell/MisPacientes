@@ -8,18 +8,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ListaCitasActivity : AppCompatActivity() {
 
 
-    var citas = ArrayList<Cita>()
     lateinit var fab: FloatingActionButton
     lateinit var rv: RecyclerView
-    lateinit var adaptador: CitaAdaptador
-    lateinit var botonAyuda : ImageButton
+    var adaptador: CitaAdaptador? = null
+    lateinit var botonAyuda: ImageButton
     lateinit var modo: MODOS
     var pacienteUid: String? = null
+    lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,15 +39,48 @@ class ListaCitasActivity : AppCompatActivity() {
         fab = findViewById(R.id.listaCitaFab)
         rv = findViewById(R.id.listaCitaRv)
         botonAyuda = findViewById(R.id.listaCitasAyudaIb)
-        adaptador = CitaAdaptador(this, pacienteUid!!)
 
-        //Configurar RV
-        rv.adapter = adaptador
-        rv.layoutManager = LinearLayoutManager(this)
+
+        db = FirebaseFirestore.getInstance()
+
+
+        //Configuramos el adaptador
+        val query = db.collection("usuarios/$usuarioId/citas")
+            .whereEqualTo("pacienteUid", pacienteUid)
+
+        val options = FirestoreRecyclerOptions.Builder<CitaModelo>()
+            .setQuery(query, CitaModelo::class.java)
+            .build()
+
+
+        //Cargamos el paciente actual y lo enviamos al adaptador
+        db.document("usuarios/$usuarioId/pacientes/$pacienteUid")
+            .get()
+            .addOnSuccessListener {
+
+                val paciente = PacienteModelo()
+                paciente.fromHashMap(it.data)
+
+                //Configuramos el adaptador
+                adaptador = CitaAdaptador(this, paciente, options)
+
+                //Configurar RV
+                rv.adapter = adaptador
+                rv.layoutManager = LinearLayoutManager(this)
+                adaptador!!.startListening()
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    this.baseContext,
+                    "ERROR RECUPERANDO PACIENTE: ${it.message!!}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
 
         //Configurar fab
         fab.setOnClickListener {
-            //savedInstanceState?.putString("pacienteUid", pacienteUid)
             val intento = Intent(it.context, EditorCitaActivity::class.java)
             intento.putExtra("modo", MODOS.CREAR.name)
             intento.putExtra("pacienteUid", pacienteUid)
@@ -56,40 +91,31 @@ class ListaCitasActivity : AppCompatActivity() {
         botonAyuda.setOnClickListener {
             AlertDialog.Builder(it.context)
                 .setMessage(getString(R.string.seleccionar_agregar_cita))
-                .setNeutralButton(R.string.si) { dialogo,_ ->
+                .setNeutralButton(R.string.si) { dialogo, _ ->
                     dialogo.dismiss()
                 }.show()
         }
 
-        //Actualizamos el RV
-        actualizarUI()
-
     }
 
-    override fun onResume() {
-        super.onResume()
-        actualizarUI()
-    }
 
     fun actualizarUI() {
+        adaptador?.notifyDataSetChanged()
 
-        Thread {
-            citas.clear()
+    }
 
-            when (modo) {
-                MODOS.UNO -> {
-                    citas.addAll(baseDatos.citaDao().porPaciente(pacienteUid!!))
+    override fun onStart() {
+        super.onStart()
+        if (adaptador != null) {
+            adaptador!!.startListening()
+        }
 
-                }
-                MODOS.TODOS -> {
-                    citas.addAll(baseDatos.citaDao().todos())
-                }
-                else -> {
-                }
-            }
-            runOnUiThread {
-                adaptador.notifyDataSetChanged()
-            }
-        }.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (adaptador != null) {
+            adaptador?.stopListening()
+        }
     }
 }

@@ -69,6 +69,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    // FirebaseUI for Cloud Firestore
+    implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
+
 
     def room_version = "2.2.6"
     implementation "androidx.room:room-runtime:$room_version"

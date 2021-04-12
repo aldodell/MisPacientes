@@ -6,9 +6,79 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 
+
+class CitaAdaptador(
+
+    var listaCitasActivity: ListaCitasActivity, var paciente: PacienteModelo,
+    options: FirestoreRecyclerOptions<CitaModelo>
+) :
+    FirestoreRecyclerAdapter<CitaModelo, CitaAdaptador.CitaViewHolder>(options) {
+
+    val db = FirebaseFirestore.getInstance()
+
+
+    class CitaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val fechaHoraTv = itemView.findViewById<TextView>(R.id.listaCitaFechaHoraTv)
+        val nombresApellidos = itemView.findViewById<TextView>(R.id.listaCitaApellidosNombresTv)
+        val editarIb = itemView.findViewById<ImageButton>(R.id.listaCitaEditarIb)
+        val eliminarIb = itemView.findViewById<ImageButton>(R.id.listaCitaEliminarIb)
+    }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CitaViewHolder {
+        val fila =
+            LayoutInflater.from(parent.context).inflate(R.layout.lista_cita_fila, parent, false)
+        return CitaViewHolder(fila)
+
+    }
+
+    override fun onBindViewHolder(holder: CitaViewHolder, position: Int, cita: CitaModelo) {
+
+
+        val apellidosNombres = "${paciente.apellidos} ${paciente.nombres}"
+        holder.fechaHoraTv.text = formateadorFechaHora.format(cita.fechaHora!!)
+        holder.nombresApellidos.text = apellidosNombres
+
+
+        //Boton modificar
+        holder.editarIb.setOnClickListener {
+            val intento = Intent(it.context, EditorCitaActivity::class.java)
+            intento.putExtra("modo", MODOS.EDITAR.name)
+            intento.putExtra("citaUid", cita.uid)
+            intento.putExtra("pacienteUid", paciente.uid)
+            it.context.startActivity(intento)
+        }
+
+
+        //boton eliminar
+        holder.eliminarIb.setOnClickListener {
+            AlertDialog.Builder(it.context)
+                .setTitle(R.string.desea_borrar_registro)
+                .setPositiveButton(R.string.si) { dialog, p1 ->
+
+                    db.document("usuarios/$usuarioId/citas/${cita.uid}")
+                        .delete().addOnSuccessListener {
+                            listaCitasActivity.actualizarUI()
+                            dialog.dismiss()
+                        }
+                }
+                .setNegativeButton(R.string.no) { dialog, p1 ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+}
+
+
+/*
 class CitaAdaptador(var listaCitasActivity: ListaCitasActivity, var pacienteUid: String) :
     RecyclerView.Adapter<CitaAdaptador.CitaViewHolder>() {
 
@@ -124,3 +194,6 @@ class CitaAdaptador(var listaCitasActivity: ListaCitasActivity, var pacienteUid:
     }
 
 }
+*/
+
+

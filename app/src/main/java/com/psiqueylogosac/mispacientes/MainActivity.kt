@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,11 +18,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-lateinit var baseDatos: AppBaseDatos
+//lateinit var baseDatos: AppBaseDatos
 
 var pacientes = ArrayList<Paciente>()
 val formateadorFecha = SimpleDateFormat("dd-MM-yyyy")
 val formateadorHora = SimpleDateFormat("hh:mm a")
+val formateadorFechaHora = SimpleDateFormat("dd-MM-yyyy hh:mm a")
+
 var usuario: FirebaseUser? = null
 var usuarioId = ""
 
@@ -38,80 +41,83 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainAdministrarPacientesIb: ImageButton
     lateinit var mainProximasCitasRv: RecyclerView
     lateinit var mainAjustesBoton: ImageButton
-
-    var proximasCitas = ArrayList<CitasConPaciente>()
-    var adaptador = MainCitaAdaptador(this)
-    private lateinit var autorizador: FirebaseAuth
+    var adaptador: MainCitaAdaptador? = null
+    var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-        baseDatos = Room.databaseBuilder(this, AppBaseDatos::class.java, "pacientes")
-            .build()
-
+        //Obtenemos las vistas
         mainAdministrarPacientesIb = findViewById(R.id.mainAdministrarPacientesIb)
         mainProximasCitasRv = findViewById(R.id.mainProximasCitasRv)
         mainAjustesBoton = findViewById(R.id.mainAjustesBt)
 
-        mainAdministrarPacientesIb.setOnClickListener {
-            val intento = Intent(this, ListaPacientesActivity::class.java)
-            startActivity(intento)
-        }
-
-        mainProximasCitasRv.apply {
-            adapter = adaptador
-            layoutManager = LinearLayoutManager(this.context)
-        }
-
-
-        mainAjustesBoton.setOnClickListener {
-            val intento = Intent(it.context, AjustesActivity::class.java)
-            startActivity(intento)
-        }
 
         /*
-        Buscamos en las preferencias si está registrado el usuario
-         */
+       Buscamos en las preferencias si está registrado el usuario
+        */
         val prefs: SharedPreferences = getSharedPreferences("ajustes", MODE_PRIVATE)
         val u = prefs.getString("usuarioId", null)
         if (u != null) {
             usuarioId = u
+
+
+            //Configuramos el RV y su adaptador
+            val query = db.collection("usuarios/$usuarioId/citas")
+                .whereGreaterThanOrEqualTo("fechaHora", Date())
+
+            val opciones = FirestoreRecyclerOptions.Builder<CitaModelo>()
+                .setQuery(query, CitaModelo::class.java)
+                .build()
+
+            adaptador = MainCitaAdaptador(this, opciones)
+
+            mainProximasCitasRv.apply {
+                adapter = adaptador!!
+                layoutManager = LinearLayoutManager(this.context)
+            }
+
+
         } else {
             AlertDialog.Builder(this)
                 .setMessage(R.string.es_necesario_registrarse)
                 .setNeutralButton(R.string.ok) { d, _ ->
                     val intento = Intent(this.baseContext, AjustesActivity::class.java)
                     startActivity(intento)
-                    d.dismiss()
                 }.show()
+        }
+
+
+        //Configuramos el botón de administrar pacients
+        mainAdministrarPacientesIb.setOnClickListener {
+            val intento = Intent(this, ListaPacientesActivity::class.java)
+            startActivity(intento)
+        }
+
+
+        //Configuramos el botón de ajustes
+        mainAjustesBoton.setOnClickListener {
+            val intento = Intent(it.context, AjustesActivity::class.java)
+            startActivity(intento)
+        }
+
+
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        if (adaptador != null) {
+            adaptador?.startListening()
         }
     }
 
-    fun actualizarUI() {
-        proximasCitas.clear()
-        Thread {
-            proximasCitas.addAll(baseDatos.citaDao().aPartirDe(Date()))
-            runOnUiThread {
-                adaptador.notifyDataSetChanged()
-                /*
-                Toast.makeText(
-                    this.applicationContext,
-                    "citas: ${proximasCitas.size}",
-                    Toast.LENGTH_LONG
-                ).show()
-                */
-
-            }
-        }.start()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        actualizarUI()
+    override fun onStop() {
+        super.onStop()
+        if (adaptador != null) {
+            adaptador?.stopListening()
+        }
     }
 
 

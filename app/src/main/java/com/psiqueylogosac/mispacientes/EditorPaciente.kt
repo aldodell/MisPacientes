@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 class EditorPaciente : AppCompatActivity() {
@@ -25,6 +27,7 @@ class EditorPaciente : AppCompatActivity() {
     var uid = ""
     var modo = ""
 
+    var db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +55,10 @@ class EditorPaciente : AppCompatActivity() {
 
         //Precargamos la interfaz si el modo es editar
         if (modo == MODOS.EDITAR.name) {
+
+            uid = this.intent.getStringExtra("uid")
+/*
             Thread {
-                uid = this.intent.getStringExtra("uid")
                 val paciente = baseDatos.pacienteDao().porUid(uid)
 
                 runOnUiThread {
@@ -68,6 +73,8 @@ class EditorPaciente : AppCompatActivity() {
                     sexo.isChecked = paciente.sexo!! == "H"
                 }
             }.start()
+            */
+
         }
 
 
@@ -116,13 +123,52 @@ class EditorPaciente : AppCompatActivity() {
         }
 
 
+        val pm = PacienteModelo().apply {
+            apellidos = apellidosEt.text.toString()
+            nombres = nombresEt.text.toString()
+            sexo = s
+            cedula = cedulaEt.text.toString()
+            fechaNacimiento =
+                formateadorFecha.parse(fechaNacimientoEt.text.toString().replace("/", "-"))
+            anamnesis = anamnesisEt.text.toString()
+            notas = notasEt.text.toString()
+            celular = celularEt.text.toString()
+            correoElectronico = correoElectronicoEt.text.toString()
+
+        }
+
+        pm.uid = uid
+
 
         /* Salvar datos con Firestore */
+        db
+            .collection("usuarios")
+            .document(usuarioId)
+            .collection("pacientes")
+            .document(uid)
+            .set(pm.toHashMap())
+            .addOnSuccessListener { finish() }
+            .addOnFailureListener { ex ->
+                Toast.makeText(this.baseContext, "Error: " + ex.message, Toast.LENGTH_LONG).show()
+            }
 
 
+        /*
+          pacienteHashMap(
+                    apellidosEt.text.toString(),
+                    nombresEt.text.toString(),
+                    s,
+                    cedulaEt.text.toString(),
+                    formateadorFecha.parse(fechaNacimientoEt.text.toString().replace("/", "-")),
+                    anamnesisEt.text.toS  cedulaEt.text.toString(tring(),
+                    notasEt.text.toString(),
+                    celularEt.text.toString(),
+                    correoElectronicoEt.text.toString()
+                )
+         */
 
 
-
+/* Salvar datos en ROOM
         val paciente = Paciente(
             uid,
             apellidosEt.text.toString(),
@@ -150,5 +196,6 @@ class EditorPaciente : AppCompatActivity() {
         }.start()
     }
 
-
+ */
+    }
 }

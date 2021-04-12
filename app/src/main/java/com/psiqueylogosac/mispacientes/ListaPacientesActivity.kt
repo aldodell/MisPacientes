@@ -9,16 +9,21 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ListaPacientesActivity : AppCompatActivity() {
 
 
     lateinit var pacientes_rv: RecyclerView
     lateinit var fab: FloatingActionButton
-    lateinit var adaptador: PacienteAdaptador
-    lateinit var botonAyuda : ImageButton
+    //lateinit var adaptador: PacienteAdaptador
 
+    lateinit var adaptadorFs: AdaptadorPacienteFs
+    lateinit var botonAyuda: ImageButton
+    val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +31,16 @@ class ListaPacientesActivity : AppCompatActivity() {
 
 
         //Instancia del adaptador del RV
-        adaptador = PacienteAdaptador(this)
+        val query = db.collection("usuarios")
+            .document(usuarioId)
+            .collection("pacientes")
+            .whereEqualTo("activo",true)
+            .orderBy("apellidos")
+            .orderBy("nombres")
+
+        val options = FirestoreRecyclerOptions.Builder<PacienteModelo>()
+            .setQuery(query, PacienteModelo::class.java).build()
+        adaptadorFs = AdaptadorPacienteFs(this, options)//PacienteAdaptador(this)
 
         //Instancia del botón para agregar pacientes
         fab = findViewById(R.id.fab)
@@ -37,14 +51,18 @@ class ListaPacientesActivity : AppCompatActivity() {
         //Boton ayuda
         botonAyuda = findViewById(R.id.listaPacientesAyudaIb)
 
+
+        /*
         //Instancia singleton de la base de datos
         baseDatos =
             Room.databaseBuilder(applicationContext, AppBaseDatos::class.java, "pacientes")
                 .allowMainThreadQueries()
                 .build()
 
+         */
+
         //Configuración del RV
-        pacientes_rv.adapter = adaptador
+        pacientes_rv.adapter = adaptadorFs
         pacientes_rv.layoutManager = LinearLayoutManager(applicationContext)
 
         //Asignamos la repsuesta al boton agregar paciente
@@ -58,19 +76,21 @@ class ListaPacientesActivity : AppCompatActivity() {
         botonAyuda.setOnClickListener {
             AlertDialog.Builder(it.context)
                 .setMessage(R.string.intrucciones_administrar_pacientes)
-                .setNeutralButton(R.string.si) {dialogo, _ ->
+                .setNeutralButton(R.string.si) { dialogo, _ ->
                     dialogo.dismiss()
                 }
                 .show()
         }
-
-
+        actualizarUI()
     }
 
 
     fun actualizarUI() {
         Log.i("aldox", "ON START")
 
+        adaptadorFs.notifyDataSetChanged()
+
+        /*
         //Leemos la base de datos:
         Thread {
             pacientes.clear()
@@ -83,11 +103,23 @@ class ListaPacientesActivity : AppCompatActivity() {
                 Log.i("aldox", "objetos: ${pacientes.size}")
             }
         }.start()
+
+         */
     }
 
     override fun onResume() {
         super.onResume()
         actualizarUI()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        adaptadorFs.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adaptadorFs.stopListening()
     }
 
 }

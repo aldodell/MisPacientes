@@ -62,8 +62,9 @@ class AjustesActivity : AppCompatActivity() {
 
 
         correoElectronicoEt.setOnFocusChangeListener { view, hasFocus ->
-            if(!hasFocus) {
+            if (!hasFocus) {
                 correoElectronico = correoElectronicoEt.text.toString().trim()
+
 
             }
         }
@@ -72,6 +73,7 @@ class AjustesActivity : AppCompatActivity() {
         contrasenaEt.setOnFocusChangeListener { view, hasFocus ->
             if (!hasFocus) {
                 contrasena = contrasenaEt.text.toString().trim()
+                identificarUsuario.isEnabled = true
                 if (contrasena.length < 6) {
                     AlertDialog.Builder(view.context)
                         .setMessage(R.string.contrasena_invalida)
@@ -87,6 +89,7 @@ class AjustesActivity : AppCompatActivity() {
         contrasenaConfirmacionEt.setOnFocusChangeListener { view, hasFocus ->
 
             if (!hasFocus) {
+                crearUsuario.isEnabled = true
                 contrasenaConfirmacion = contrasenaConfirmacionEt.text.toString().trim()
                 if (contrasenaConfirmacion.toString().length > 1) {
                     if (contrasena != contrasenaConfirmacion) {
@@ -108,14 +111,8 @@ class AjustesActivity : AppCompatActivity() {
                 contrasena
             ).addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    usuario = autorizador.currentUser
-                    usuarioId = usuario?.uid!!
 
-                    prefs.edit().apply {
-                        putString("correoElectronico", correoElectronico)
-                        putString("contrasena", contrasena)
-                        putString("usuarioId", usuarioId)
-                    }.apply()
+                    guardarUsuarioLocalmente()
 
                     AlertDialog.Builder(it.context)
                         .setMessage(R.string.usuario_creado)
@@ -137,12 +134,7 @@ class AjustesActivity : AppCompatActivity() {
                 .addOnCompleteListener(this)
                 { task ->
                     if (task.isSuccessful) {
-                        //     respaldarDatos.isEnabled = true
-                        //    recuperarDatos.isEnabled = true
-
-                        usuario = autorizador.currentUser
-                        usuarioId = usuario?.uid!!
-
+                        guardarUsuarioLocalmente()
 
                         AlertDialog.Builder(it.context)
                             .setMessage(R.string.acceso_positivo)
@@ -158,4 +150,18 @@ class AjustesActivity : AppCompatActivity() {
                 }
         }
     }
+
+    fun guardarUsuarioLocalmente() {
+        usuario = autorizador.currentUser
+        usuarioId = usuario?.uid!!
+
+        prefs.edit().apply {
+            putString("correoElectronico", correoElectronico)
+            putString("contrasena", contrasena)
+            putString("usuarioId", usuarioId)
+        }.apply()
+
+
+    }
+
 }
