@@ -45,7 +45,7 @@ class EditorPaciente : AppCompatActivity() {
         notasEt = findViewById(R.id.notasEt)
         sexo = findViewById(R.id.sexoSw)
         salvar = findViewById(R.id.salvarBt)
-        descartar = findViewById(R.id.descartarBt)
+        descartar = findViewById(R.id.salvarBt)
 
 
         //Verificamos el modo
@@ -57,28 +57,12 @@ class EditorPaciente : AppCompatActivity() {
         if (modo == MODOS.EDITAR.name) {
 
             uid = this.intent.getStringExtra("uid")
-/*
-            Thread {
-                val paciente = baseDatos.pacienteDao().porUid(uid)
 
-                runOnUiThread {
-                    apellidosEt.setText(paciente.apellidos)
-                    nombresEt.setText(paciente.nombres)
-                    cedulaEt.setText(paciente.cedula)
-                    fechaNacimientoEt.setText(formateadorFecha.format(paciente.fechaNacimiento!!))
-                    celularEt.setText(paciente.celular)
-                    correoElectronicoEt.setText(paciente.correoElectronico)
-                    anamnesisEt.setText(paciente.anamnesis)
-                    notasEt.setText(paciente.notas)
-                    sexo.isChecked = paciente.sexo!! == "H"
-                }
-            }.start()
-            */
 
         }
 
 
-//Cambio de etiqueta de sexo segun click al switch
+        //Cambio de etiqueta de sexo segun click al switch
         sexo.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 sexo.text = getString(R.string.hombre)
@@ -153,49 +137,7 @@ class EditorPaciente : AppCompatActivity() {
             }
 
 
-        /*
-          pacienteHashMap(
-                    apellidosEt.text.toString(),
-                    nombresEt.text.toString(),
-                    s,
-                    cedulaEt.text.toString(),
-                    formateadorFecha.parse(fechaNacimientoEt.text.toString().replace("/", "-")),
-                    anamnesisEt.text.toS  cedulaEt.text.toString(tring(),
-                    notasEt.text.toString(),
-                    celularEt.text.toString(),
-                    correoElectronicoEt.text.toString()
-                )
-         */
 
 
-/* Salvar datos en ROOM
-        val paciente = Paciente(
-            uid,
-            apellidosEt.text.toString(),
-            nombresEt.text.toString(),
-            s,
-            cedulaEt.text.toString(),
-            formateadorFecha.parse(fechaNacimientoEt.text.toString().replace("/", "-")),
-            anamnesisEt.text.toString(),
-            notasEt.text.toString(),
-            celularEt.text.toString(),
-            correoElectronicoEt.text.toString()
-
-        )
-
-        Thread {
-            if (modo == MODOS.CREAR.name) {
-                baseDatos.pacienteDao().insertar(paciente)
-            } else if (modo == MODOS.EDITAR.name) {
-                baseDatos.pacienteDao().actualizar(paciente)
-            }
-
-            runOnUiThread {
-                finish()
-            }
-        }.start()
-    }
-
- */
     }
 }

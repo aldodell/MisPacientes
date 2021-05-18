@@ -46,25 +46,23 @@ class AjustesActivity : AppCompatActivity() {
         crearUsuarioEtiqueta = findViewById(R.id.ajustesCrearUsuarioEtiqueta)
         identificarUsuarioEtiqueta = findViewById(R.id.ajustesIdentificarUsaurioEtiqueta)
 
-
-
-
         //Inhabilitamos botones
         configurarInterfaz(false,false, false)
-
+        correoElectronicoEt.isEnabled = true
 
         //Obtenemos acceso a las preferencias
         prefs = this.getSharedPreferences("ajustes", MODE_PRIVATE)
 
         //Si el correo no es null entonces procesamos la autorizacion
-        if (prefs.getString("correoElectronico", null) != null) {
+        if (prefs.getString("correoElectronico", null) == null) {
+            // configurarInterfaz(true,true)
+        } else {
             correoElectronicoEt.setText(prefs.getString("correoElectronico", ""))
             contrasenaEt.setText(prefs.getString("contrasena", ""))
             contrasena = contrasenaEt.text.toString().trim()
             correoElectronico = correoElectronicoEt.text.toString().trim()
-            configurarInterfaz(false,true)
-        } else {
-            configurarInterfaz(true,false)
+
+            configurarInterfaz(null,true)
         }
 
 
@@ -76,7 +74,7 @@ class AjustesActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(correoElectronico != correoElectronicoEt.text.toString().trim())
                 {
-                    configurarInterfaz(true,true,false)
+                    configurarInterfaz(true,true)
                 }
             }
 
@@ -118,9 +116,6 @@ class AjustesActivity : AppCompatActivity() {
             }
 
         })
-
-
-
 
 
 
@@ -177,11 +172,11 @@ class AjustesActivity : AppCompatActivity() {
                                 finish()
                             }
                             .show()
-                        configurarInterfaz(false, true)
+                        configurarInterfaz(false, true, false)
                     } else {
                         AlertDialog.Builder(it.context)
                             .setMessage(getString(R.string.error_creando_usuario) + " " + task.exception!!.message!!)
-                            .setNeutralButton(R.string.ok) { d, _ -> d.dismiss() }
+                            .setNeutralButton(R.string.ok) { d, _ ->  configurarInterfaz(true, true, false) }
                             .show()
                     }
                 }
@@ -204,7 +199,7 @@ class AjustesActivity : AppCompatActivity() {
                     } else {
                         AlertDialog.Builder(it.context)
                             .setMessage(getString(R.string.error_creando_usuario) + " " + task.exception!!.message!!)
-                            .setNeutralButton(R.string.ok) { d, _ -> d.dismiss() }
+                            .setNeutralButton(R.string.ok) { d, _ -> configurarInterfaz(false,true,false) }
                             .show()
                     }
 
@@ -223,7 +218,7 @@ class AjustesActivity : AppCompatActivity() {
         }.apply()
     }
 
-    fun configurarInterfaz(crear: Boolean?, identificar : Boolean?, procesando: Boolean?=null){
+    fun configurarInterfaz(crear: Boolean?=null, identificar : Boolean?=null, procesando: Boolean?=null){
 
         crearUsuario.isEnabled = false
         identificarUsuario.isEnabled = false

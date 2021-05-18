@@ -1,144 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditorPaciente">
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView"
-        style="@style/Theme.MisPacientes.Titulo"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/administrar_pacientes"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/administrar_pacientes" />
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <EditText
                 android:id="@+id/nombresEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/nombres"
                 android:inputType="textPersonName"
-                android:autofillHints="" />
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/apellidosEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/apellidos"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nombresEt" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <Switch
                 android:id="@+id/sexoSw"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/mujer" />
+                android:layout_marginTop="8dp"
+                android:text="@string/mujer_hombre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/apellidosEt" />
 
             <EditText
                 android:id="@+id/cedulaEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autofillHints=""
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/cedula"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:text="Name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sexoSw" />
 
             <EditText
                 android:id="@+id/fechaNacimientoEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/fecha_nacimiento"
                 android:inputType="date"
-                android:autofillHints="" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cedulaEt" />
 
             <EditText
                 android:id="@+id/correoElectronicoEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/correo_electronico"
                 android:inputType="textEmailAddress"
-                android:autofillHints="" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fechaNacimientoEt" />
 
             <EditText
                 android:id="@+id/celularEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
-                android:hint="@string/celular"
                 android:inputType="phone"
-                android:autofillHints="" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/correoElectronicoEt" />
 
             <EditText
                 android:id="@+id/anamnesisEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="@string/anamnesis"
                 android:inputType="textMultiLine"
-                android:autofillHints="" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/celularEt" />
 
             <EditText
                 android:id="@+id/notasEt"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="@string/notas"
                 android:inputType="textMultiLine"
-                android:autofillHints="" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/descartarBt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:text="@string/descartar"
-                    android:textColor="@color/design_default_color_on_primary" />
-
-                <Button
-                    android:id="@+id/salvarBt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:text="@string/salvar"
-                    android:textColor="@color/design_default_color_on_primary" />
-            </LinearLayout>
-
-        </LinearLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/anamnesisEt" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/descartarBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/descartar"
+            app:layout_constraintEnd_toStartOf="@+id/salvarBt"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/salvarBt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/salvar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
