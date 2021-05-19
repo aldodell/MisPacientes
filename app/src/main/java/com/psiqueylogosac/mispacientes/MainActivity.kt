@@ -20,13 +20,13 @@ import kotlin.collections.ArrayList
 
 //lateinit var baseDatos: AppBaseDatos
 
-var pacientes = ArrayList<Paciente>()
+var pacientes = ArrayList<PacienteModelo>()
 val formateadorFecha = SimpleDateFormat("dd-MM-yyyy")
 val formateadorHora = SimpleDateFormat("hh:mm a")
 val formateadorFechaHora = SimpleDateFormat("dd-MM-yyyy hh:mm a")
 
 var usuario: FirebaseUser? = null
-var usuarioId = ""
+var usuarioId : String ? = null
 
 enum class MODOS(val m: String) {
     CREAR("crear"),
@@ -54,13 +54,11 @@ class MainActivity : AppCompatActivity() {
         mainAjustesBoton = findViewById(R.id.mainAjustesBt)
 
 
-        /*
-       Buscamos en las preferencias si está registrado el usuario
-        */
-        val prefs: SharedPreferences = getSharedPreferences("ajustes", MODE_PRIVATE)
-        val u = prefs.getString("usuarioId", null)
-        if (u != null) {
-            usuarioId = u
+
+        // Buscamos en las preferencias si está registrado el usuario
+        usuarioId = Preferencias(this).usuarioId
+
+        if(usuarioId!=null) {
 
 
             //Configuramos el RV y su adaptador

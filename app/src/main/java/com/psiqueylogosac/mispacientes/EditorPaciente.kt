@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -20,7 +21,7 @@ class EditorPaciente : AppCompatActivity() {
     lateinit var fechaNacimientoEt: EditText
     lateinit var anamnesisEt: EditText
     lateinit var notasEt: EditText
-    lateinit var sexo: SwitchMaterial
+    lateinit var sexo: Switch
     lateinit var salvar: Button
     lateinit var descartar: Button
 
@@ -45,7 +46,7 @@ class EditorPaciente : AppCompatActivity() {
         notasEt = findViewById(R.id.notasEt)
         sexo = findViewById(R.id.sexoSw)
         salvar = findViewById(R.id.salvarBt)
-        descartar = findViewById(R.id.salvarBt)
+        descartar = findViewById(R.id.descartarBt)
 
 
         //Verificamos el modo
@@ -55,10 +56,26 @@ class EditorPaciente : AppCompatActivity() {
 
         //Precargamos la interfaz si el modo es editar
         if (modo == MODOS.EDITAR.name) {
-
             uid = this.intent.getStringExtra("uid")
 
+            db
+                .document("usuarios/$uid/pacientes")
+                .get()
+                .addOnSuccessListener {
+                    val paciente = PacienteModelo()
+                    paciente.fromHashMap(it.data)
 
+                    paciente.apply {
+                        nombresEt.setText(nombres)
+                        apellidosEt.setText(apellidos)
+                        cedulaEt.setText(cedula)
+                        fechaNacimientoEt.setText(formateadorFecha.format(fechaNacimiento))
+                        anamnesisEt.setText(anamnesis)
+                        notasEt.setText(notas)
+                        celularEt.setText(celular)
+                        correoElectronicoEt.setText(correoElectronico)
+                    }
+                }
         }
 
 

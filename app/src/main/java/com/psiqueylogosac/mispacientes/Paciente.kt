@@ -1,53 +1,7 @@
 package com.psiqueylogosac.mispacientes
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
-import com.google.firebase.ktx.Firebase
 import java.util.*
-
-@Entity(tableName = "pacientes")
-data class Paciente(
-    @PrimaryKey val uid: String,
-    val apellidos: String?,
-    val nombres: String?,
-    val sexo: String?,
-    val cedula: String?,
-    val fechaNacimiento: Date?,
-    val anamnesis: String?,
-    val notas: String?,
-    val celular: String?,
-    val correoElectronico: String?
-
-)
-
-
-fun pacienteHashMap(
-    apellidos: String? = null,
-    nombres: String? = null,
-    sexo: String? = null,
-    cedula: String? = null,
-    fechaNacimiento: Date? = null,
-    anamnesis: String? = null,
-    notas: String? = null,
-    celular: String? = null,
-    correoElectronico: String? = null
-
-
-): Map<String, Any?> {
-
-    return hashMapOf(
-        "apellidos" to apellidos,
-        "nombres" to nombres,
-        "sexo" to sexo,
-        "cedula" to cedula,
-        "fechaNacimiento" to fechaNacimiento,
-        "anamnesis" to anamnesis,
-        "notas" to notas,
-        "celular" to celular,
-        "correoElectronico" to correoElectronico
-    )
-}
 
 
 open class PacienteModelo() {
