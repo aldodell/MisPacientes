@@ -15,11 +15,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ListaPacientesActivity : AppCompatActivity() {
-
+    private var usuarioId : String?=null
 
     lateinit var pacientes_rv: RecyclerView
     lateinit var fab: FloatingActionButton
-    //lateinit var adaptador: PacienteAdaptador
+
 
     lateinit var adaptadorFs: AdaptadorPacienteFs
     lateinit var botonAyuda: ImageButton
@@ -28,11 +28,11 @@ class ListaPacientesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lista_pacientes)
-
+        usuarioId = Preferencias(this).usuarioId
 
         //Instancia del adaptador del RV
         val query = db.collection("usuarios")
-            .document(usuarioId)
+            .document(usuarioId!!)
             .collection("pacientes")
             .whereEqualTo("activo",true)
             .orderBy("apellidos")
@@ -52,14 +52,6 @@ class ListaPacientesActivity : AppCompatActivity() {
         botonAyuda = findViewById(R.id.listaPacientesAyudaIb)
 
 
-        /*
-        //Instancia singleton de la base de datos
-        baseDatos =
-            Room.databaseBuilder(applicationContext, AppBaseDatos::class.java, "pacientes")
-                .allowMainThreadQueries()
-                .build()
-
-         */
 
         //Configuración del RV
         pacientes_rv.adapter = adaptadorFs
@@ -90,21 +82,7 @@ class ListaPacientesActivity : AppCompatActivity() {
 
         adaptadorFs.notifyDataSetChanged()
 
-        /*
-        //Leemos la base de datos:
-        Thread {
-            pacientes.clear()
-            pacientes.addAll(
-                baseDatos.pacienteDao().todos() as ArrayList<Paciente>
-            )
-            runOnUiThread {
-                pacientes_rv.adapter?.notifyDataSetChanged()
-                pacientes_rv.invalidate()
-                Log.i("aldox", "objetos: ${pacientes.size}")
-            }
-        }.start()
 
-         */
     }
 
     override fun onResume() {

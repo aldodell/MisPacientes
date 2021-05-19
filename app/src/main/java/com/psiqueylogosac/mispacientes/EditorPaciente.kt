@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
@@ -21,11 +20,11 @@ class EditorPaciente : AppCompatActivity() {
     lateinit var fechaNacimientoEt: EditText
     lateinit var anamnesisEt: EditText
     lateinit var notasEt: EditText
-    lateinit var sexo: Switch
+    lateinit var sexoSw: Switch
     lateinit var salvar: Button
     lateinit var descartar: Button
 
-    var uid = ""
+    var pacienteId = ""
     var modo = ""
 
     var db = FirebaseFirestore.getInstance()
@@ -44,7 +43,7 @@ class EditorPaciente : AppCompatActivity() {
         fechaNacimientoEt = findViewById(R.id.fechaNacimientoEt)
         anamnesisEt = findViewById(R.id.anamnesisEt)
         notasEt = findViewById(R.id.notasEt)
-        sexo = findViewById(R.id.sexoSw)
+        sexoSw = findViewById(R.id.sexoSw)
         salvar = findViewById(R.id.salvarBt)
         descartar = findViewById(R.id.descartarBt)
 
@@ -56,10 +55,10 @@ class EditorPaciente : AppCompatActivity() {
 
         //Precargamos la interfaz si el modo es editar
         if (modo == MODOS.EDITAR.name) {
-            uid = this.intent.getStringExtra("uid")
+            pacienteId = this.intent.getStringExtra("uid")
 
             db
-                .document("usuarios/$uid/pacientes")
+                .document("usuarios/$usuarioId/pacientes/$pacienteId")
                 .get()
                 .addOnSuccessListener {
                     val paciente = PacienteModelo()
@@ -74,17 +73,18 @@ class EditorPaciente : AppCompatActivity() {
                         notasEt.setText(notas)
                         celularEt.setText(celular)
                         correoElectronicoEt.setText(correoElectronico)
+                        sexoSw.isChecked = sexo=="H"
                     }
                 }
         }
 
 
         //Cambio de etiqueta de sexo segun click al switch
-        sexo.setOnCheckedChangeListener { _, isChecked ->
+        sexoSw.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                sexo.text = getString(R.string.hombre)
+                sexoSw.text = getString(R.string.hombre)
             } else {
-                sexo.text = getString(R.string.mujer)
+                sexoSw.text = getString(R.string.mujer)
             }
 
         }
@@ -113,14 +113,14 @@ class EditorPaciente : AppCompatActivity() {
 
     fun salvarDatos() {
         var s = ""
-        if (sexo.isChecked) {
+        if (sexoSw.isChecked) {
             s = "H"
         } else {
             s = "M"
         }
 
         if (modo == MODOS.CREAR.name) {
-            uid = UUID.randomUUID().toString()
+            pacienteId = UUID.randomUUID().toString()
         }
 
 
@@ -138,15 +138,15 @@ class EditorPaciente : AppCompatActivity() {
 
         }
 
-        pm.uid = uid
+        pm.uid = pacienteId
 
 
         /* Salvar datos con Firestore */
         db
             .collection("usuarios")
-            .document(usuarioId)
+            .document(usuarioId!!)
             .collection("pacientes")
-            .document(uid)
+            .document(pacienteId)
             .set(pm.toHashMap())
             .addOnSuccessListener { finish() }
             .addOnFailureListener { ex ->

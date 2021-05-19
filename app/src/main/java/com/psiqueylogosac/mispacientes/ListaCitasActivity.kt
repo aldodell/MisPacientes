@@ -14,7 +14,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ListaCitasActivity : AppCompatActivity() {
 
-
     lateinit var fab: FloatingActionButton
     lateinit var rv: RecyclerView
     var adaptador: CitaAdaptador? = null

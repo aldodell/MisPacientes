@@ -1,26 +1,11 @@
 package com.psiqueylogosac.mispacientes
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.firebase.Timestamp
 import java.util.*
 
-
-@Entity(tableName = "citas")
-data class Cita(
-    @PrimaryKey() val uid: String,
-    var fecha: Date? = Date(),
-    var hora: Date? = Date(),
-    var pacienteUid: String = "",
-    var informe: String? = "",
-    var notas: String? = "",
-    var honorarios: String? = ""
-)
-
-
 class CitaModelo {
 
-    class Paciente2 {
+    class Paciente {
         var uid: String? = null
         var apellidos: String? = null
         var nombres: String? = null
@@ -42,7 +27,7 @@ class CitaModelo {
     var informe: String? = ""
     var notas: String? = ""
     var honorarios: String? = ""
-    var paciente: Paciente2? = Paciente2()
+    var paciente: Paciente? = Paciente()
 
     fun toHashMap(): Map<String, Any?> = hashMapOf(
         "uid" to uid,
@@ -67,31 +52,3 @@ class CitaModelo {
 
 }
 
-
-/*
-@Entity(tableName = "citas")
-data class Cita(
-    @PrimaryKey() val uid: String,
-    var fecha: Date? = Date(),
-    var hora: Date? = Date(),
-    var pacienteUid: String = "",
-    var informe: String? = "",
-    var notas: String? = "",
-    var honorarios: String? = ""
-)
-
-fun citaHashMap(
-    fechaHora: Date? = null,
-    pacienteUid: String? = null,
-    notas: String? = null,
-    honorarios: String? = null
-): Map<String, Any?> {
-    return hashMapOf(
-        "fechaHora" to fechaHora,
-        "pacienteUid" to pacienteUid,
-        "notas" to notas,
-        "honorarios" to honorarios
-    )
-}
-
- */

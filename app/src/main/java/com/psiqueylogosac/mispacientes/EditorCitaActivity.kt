@@ -4,19 +4,15 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import com.google.firebase.Timestamp
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.DateTime
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
-import java.time.temporal.Temporal
 import java.util.*
 
 
@@ -162,24 +158,8 @@ class EditorCitaActivity : AppCompatActivity() {
 
     fun salvarCita() {
 
-
-        @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS") val fecha =
-            formateadorFecha.format(
-                formateadorFecha.parse(
-                    fechaEt.text.toString().replace("/", "-")
-                )
-            )
-
-
-        @Suppress(
-            "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS",
-            "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
-        )
-        val hora = formateadorHora.format(
-            formateadorHora.parse(
-                horaEt.text.toString()
-            )
-        )
+        val fecha = fechaEt.text.toString().replace("/", "-")
+        val hora = horaEt.text.toString()
 
         val miFechaHora = formateadorFechaHora.parse("$fecha $hora")
 
@@ -201,7 +181,7 @@ class EditorCitaActivity : AppCompatActivity() {
 
         /* Guardar en la firestore */
         db.collection("usuarios")
-            .document(usuarioId)
+            .document(usuarioId!!)
             .collection("citas")
             .document(cita.uid!!)
             .set(cita.toHashMap())
